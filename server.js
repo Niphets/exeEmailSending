@@ -6,12 +6,9 @@ const cors = require("cors");
 const productsData = require("./data/products");
 
 const app = express();
-app.set("trust proxy", process.env.TRUST_PROXY ? Number(process.env.TRUST_PROXY) : 1);
 
-// Import routes
-const indexRoutes = require("./routes/index");
-const productsRoutes = require("./routes/products");
-const contactRoutes = require("./routes/contact");
+// MUST be first
+app.set("trust proxy", 1);
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -22,7 +19,7 @@ app.use(cors({
     methods: ["GET", "POST"]
 }));
 
-// View engine setup
+// View engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
@@ -30,11 +27,11 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-app.use("/", indexRoutes);
-app.use("/products", productsRoutes);
-app.use("/contact", contactRoutes);
+app.use("/", require("./routes/index"));
+app.use("/products", require("./routes/products"));
+app.use("/contact", require("./routes/contact"));
 
-// 404 handler
+// 404 catch
 app.use((req, res) => {
     res.status(404).render("home", { 
         error: "Page not found",
@@ -43,7 +40,6 @@ app.use((req, res) => {
     });
 });
 
-// Start server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`🚀 Pick Freshy server running: http://localhost:${PORT}`);
