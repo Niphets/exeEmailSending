@@ -1,35 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include("partials/headerFiles") %>
-  <title>Contact | Pick Freshy</title>
+  <%- include("partials/headerFiles", { pageTitle: "Contact" }) %>
 </head>
 
 <body>
   <%- include("partials/header") %>
 
-  <div class="container my-5">
-    <h2 class="mb-4 text-center">Contact Us</h2>
+  <main class="container my-5">
+    <div class="row g-5">
+      <div class="col-lg-6">
+        <p class="eyebrow">Let's collaborate</p>
+        <h2>Tell us what you need and we'll share today's harvest list.</h2>
+        <p class="text-muted"><strong>Office hours:</strong> 8:00 AM – 8:00 PM IST · Monday to Saturday</p>
 
-    <form method="POST" action="/contact">
-      <div class="mb-3">
-        <label class="form-label">Your Name</label>
-        <input type="text" class="form-control" name="name" required>
+        <div class="contact-card">
+          <h6 class="text-success text-uppercase small mb-2">Prefer to preview the email?</h6>
+          <p class="mb-3 text-muted">We send a branded summary with your message and featured products. Have a look before you submit.</p>
+          <a class="btn btn-outline-success" href="<%= emailTemplatePreviewUrl %>" target="_blank" rel="noopener">Open email template</a>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Your Email</label>
-        <input type="email" class="form-control" name="email" required>
-      </div>
+      <div class="col-lg-6">
+        <% if (success) { %>
+          <div class="alert alert-success"><%= success %></div>
+        <% } %>
+        <% if (error) { %>
+          <div class="alert alert-danger"><%= error %></div>
+        <% } %>
 
-      <div class="mb-3">
-        <label class="form-label">Message</label>
-        <textarea class="form-control" rows="4" name="message" required></textarea>
-      </div>
+        <form method="POST" action="/contact" class="contact-form card border-0 shadow-sm p-4">
+          <div class="mb-3">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-control" name="name" value="<%= (formData && formData.name) || '' %>" required>
+          </div>
 
-      <button type="submit" class="btn btn-primary w-100">Send Message</button>
-    </form>
-  </div>
+          <div class="mb-3">
+            <label class="form-label">Your Email</label>
+            <input type="email" class="form-control" name="email" value="<%= (formData && formData.email) || '' %>" required>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Message</label>
+            <textarea class="form-control" rows="4" name="message" required><%= (formData && formData.message) || '' %></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-success w-100">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </main>
 
   <%- include("partials/footer") %>
 </body>

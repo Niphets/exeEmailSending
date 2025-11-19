@@ -1,24 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>New Contact Message</title>
-
   <style>
-    body { font-family: Arial, sans-serif; background:#f3f3f3; padding:20px; }
-    .box { max-width:600px; margin:auto; background:#fff; padding:20px; border-radius:8px; }
-    .label { font-weight:bold; }
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #f3f5f4;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color: #1f2d2b;
+    }
+    .wrapper {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 32px;
+      margin-bottom: 16px;
+      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.08);
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.1rem;
+      text-transform: uppercase;
+      background: #e8f7ee;
+      color: #1ca84e;
+      margin-bottom: 12px;
+    }
+    .message-body {
+      white-space: pre-line;
+      line-height: 1.6;
+      background: #f6faf7;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .product-card {
+      border: 1px solid #eef3ef;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+    }
+    .product-card img {
+      border-radius: 12px;
+      display: block;
+      margin: 0 auto 12px;
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+    }
+    .footer {
+      text-align: center;
+      color: #6a7c74;
+      font-size: 14px;
+      margin-top: 24px;
+    }
+    .social-links a {
+      margin: 0 6px;
+      color: #1ca84e;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    @media (max-width: 600px) {
+      body { padding: 16px; }
+      .card { padding: 24px; }
+    }
   </style>
 </head>
 
 <body>
-  <div class="box">
-    <h2>New Contact Message</h2>
+  <div class="wrapper">
+    <div class="card">
+      <span class="badge">New inquiry</span>
+      <h2 style="margin: 0 0 8px;">You've got a message from <%= name %></h2>
+      <p style="margin: 0 0 16px; color:#5f6f69;">Reply to <a href="mailto:<%= email %>"><%= email %></a></p>
 
-    <p><span class="label">Name:</span> <%= name %></p>
-    <p><span class="label">Email:</span> <%= email %></p>
-    <p><span class="label">Message:</span></p>
-    <p><%= message %></p>
+      <div class="message-body">
+        <%= message %>
+      </div>
+    </div>
+
+    <% if (products && products.length) { %>
+      <div class="card">
+        <h3 style="margin-top: 0;">Products highlighted in this email</h3>
+        <div class="product-grid">
+          <% products.forEach(product => { %>
+            <div class="product-card">
+              <img src="<%= product.image %>" alt="<%= product.title %>">
+              <h4 style="margin: 0 0 4px;"><%= product.title %></h4>
+              <p style="margin: 0 0 8px; color:#5f6f69;"><%= product.description %></p>
+              <strong style="color:#1ca84e;"><%= product.price %></strong>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="card" style="text-align: center;">
+      <p style="margin-bottom: 8px;"><strong><%= company %></strong></p>
+      <p style="margin: 0 0 12px; color:#5f6f69;"><%= company_address %></p>
+      <div class="social-links">
+        <a href="<%= facebook_url %>">Facebook</a> ·
+        <a href="<%= instagram_url %>">Instagram</a> ·
+        <a href="<%= linkedin_url %>">LinkedIn</a> ·
+        <a href="<%= twitter_url %>">Twitter</a>
+      </div>
+    </div>
+
+    <p class="footer">You received this email because someone submitted the contact form on pickfreshy.com.</p>
   </div>
 </body>
 </html>

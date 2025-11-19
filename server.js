@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const helmet = require("helmet");
 const cors = require("cors");
+const productsData = require("./data/products");
 
 const app = express();
 
@@ -36,7 +37,8 @@ app.use("/contact", contactRoutes);
 app.use((req, res) => {
     res.status(404).render("home", { 
         error: "Page not found",
-        currentPage: 'home' 
+        currentPage: 'home',
+        heroProducts: productsData.slice(0, 3)
     });
 });
 

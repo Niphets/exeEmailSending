@@ -1,26 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <%- include("partials/headerFiles", { pageTitle: "Home" }) %>
 </head>
+
 <body>
-    <div class="container mt-4">
-        <div class="row">
-            <% products.forEach(p => { %>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="<%= p.image %>" class="card-img-top" alt="">
-                        <div class="card-body">
-                            <h5 class="card-title"><%= p.title %></h5>
-                            <p class="card-text"><%= p.description %></p>
-                            <p class="card-text">Price: <%= p.price %></p>
-                        </div>
-                    </div>
+  <%- include("partials/header") %>
+
+  <% const heroList = Array.isArray(heroProducts) ? heroProducts : []; %>
+
+  <main>
+    <% if (typeof error !== "undefined" && error) { %>
+      <div class="alert alert-warning rounded-0 text-center mb-0">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <section class="hero-section">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-5">
+            <p class="eyebrow">From farm to doorstep</p>
+            <h1>Fresh produce curated for urban lifestyles</h1>
+            <p class="lead text-muted">
+              We partner with small-batch farmers to deliver vegetables and fruits that are handpicked every morning.
+            </p>
+            <div class="d-flex gap-3">
+              <a href="/products" class="btn btn-success btn-lg">Browse produce</a>
+              <a href="/contact" class="btn btn-outline-success btn-lg">Talk to us</a>
+            </div>
+          </div>
+          <div class="col-lg-7 mt-5 mt-lg-0">
+            <div class="row g-4">
+              <% heroList.forEach(product => { %>
+                <div class="col-sm-6">
+                  <div class="hero-card">
+                    <img src="<%= product.image %>" alt="<%= product.title %>" class="img-fluid rounded-4 mb-3">
+                    <p class="text-muted small mb-1"><%= product.price %></p>
+                    <h5 class="mb-1"><%= product.title %></h5>
+                    <p class="mb-0"><%= product.description %></p>
+                  </div>
                 </div>
-            <% }) %>
+              <% }) %>
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
+    </section>
+
+    <section class="py-5 bg-light">
+      <div class="container">
+        <div class="row text-center g-4">
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="icon-circle bg-success-subtle text-success mb-3">🚚</div>
+              <h5>Same-day delivery</h5>
+              <p class="mb-0 text-muted">Order before noon and get it delivered before dinner.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="icon-circle bg-success-subtle text-success mb-3">🌾</div>
+              <h5>Local partnerships</h5>
+              <p class="mb-0 text-muted">We directly support 25+ farmers within 100 km radius.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="icon-circle bg-success-subtle text-success mb-3">♻️</div>
+              <h5>Sustainable packaging</h5>
+              <p class="mb-0 text-muted">All deliveries ship in reusable crates to minimize waste.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section text-center text-white">
+      <div class="container">
+        <p class="eyebrow text-white-50">Need bulk pricing?</p>
+        <h2>We supply co-working cafeterias and boutique cafés</h2>
+        <p class="mb-4">Drop us a message and we'll share this week's harvest list.</p>
+        <a href="/contact" class="btn btn-light btn-lg text-success fw-bold">Send a message</a>
+      </div>
+    </section>
+  </main>
+
+  <%- include("partials/footer") %>
 </body>
 </html>
