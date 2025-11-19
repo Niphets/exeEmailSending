@@ -10,18 +10,32 @@ if (!EMAIL || !EMAIL_PASSWORD) {
 }
 
 // Email transporter
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-        user: EMAIL,
-        pass: EMAIL_PASSWORD
-    },
-    tls: {
-        rejectUnauthorized: true
-    }
+// const transporter = nodemailer.createTransport({
+//     host: "smtp.gmail.com",
+//     port: 465,
+//     secure: true,
+//     auth: {
+//         user: EMAIL,
+//         pass: EMAIL_PASSWORD
+//     },
+//     tls: {
+//         rejectUnauthorized: true
+//     }
+// });
+
+transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
+
 
 // Featured products rendered into the email template
 const featuredProducts = [
