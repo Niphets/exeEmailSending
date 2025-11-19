@@ -4,11 +4,15 @@ const rateLimit = require("express-rate-limit");
 const validator = require("validator");
 const { sendContactEmail, getEmailTemplateData } = require("../config/emailConfig");
 
-// Rate limiting
+// ✅ FIXED: safer rate limiter for Render
 const contactLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 25,
-    message: "Too many requests. Please try again later."
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+        error: "Too many requests. Please try again later."
+    }
 });
 
 const defaultFormData = {
@@ -17,6 +21,7 @@ const defaultFormData = {
     message: ""
 };
 
+// For preview images
 const emailPreviewImageMap = {
     apple: "/images/apple.jpg",
     carrot: "/images/carrots.jpg"
@@ -35,6 +40,7 @@ function mapProductsForPreview(products = []) {
     });
 }
 
+// GET contact page
 router.get("/", (req, res) => {
     res.render("contact", { 
         currentPage: 'contact',
@@ -45,10 +51,11 @@ router.get("/", (req, res) => {
     });
 });
 
+// POST contact form
 router.post("/", contactLimiter, async (req, res) => {
     const { name, email, message } = req.body;
 
-    // Sanitize inputs
+    // Sanitize
     const trimmedData = {
         name: name?.trim() || "",
         email: email?.trim() || "",
@@ -59,7 +66,7 @@ router.post("/", contactLimiter, async (req, res) => {
     const cleanEmail = validator.normalizeEmail(trimmedData.email);
     const cleanMessage = validator.stripLow(trimmedData.message, true);
 
-    // Validate
+    // Validate fields
     if (!cleanEmail || !validator.isEmail(cleanEmail)) {
         return res.render("contact", {
             currentPage: 'contact',
@@ -101,6 +108,7 @@ router.post("/", contactLimiter, async (req, res) => {
     }
 });
 
+// Email preview
 router.get("/preview", (req, res) => {
     const previewData = getEmailTemplateData({
         name: "Ava Sharma",
