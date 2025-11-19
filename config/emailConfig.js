@@ -10,30 +10,17 @@ if (!EMAIL || !EMAIL_PASSWORD) {
 }
 
 // Email transporter
-// const transporter = nodemailer.createTransport({
-//     host: "smtp.gmail.com",
-//     port: 465,
-//     secure: true,
-//     auth: {
-//         user: EMAIL,
-//         pass: EMAIL_PASSWORD
-//     },
-//     tls: {
-//         rejectUnauthorized: true
-//     }
-// });
-
-transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || "smtp.gmail.com",
+    port: Number(process.env.SMTP_PORT || 465),
+    secure: process.env.SMTP_SECURE ? process.env.SMTP_SECURE === "true" : true,
+    auth: {
+        user: EMAIL,
+        pass: EMAIL_PASSWORD
+    },
+    tls: {
+        rejectUnauthorized: process.env.SMTP_REJECT_UNAUTHORIZED ? process.env.SMTP_REJECT_UNAUTHORIZED === "true" : true
+    }
 });
 
 
