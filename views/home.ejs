@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <% products.forEach(p => { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="<%= p.image %>" class="card-img-top" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= p.title %></h5>
+                            <p class="card-text"><%= p.description %></p>
+                            <p class="card-text">Price: <%= p.price %></p>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</body>
+</html>

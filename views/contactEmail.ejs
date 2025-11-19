@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>New Contact Message</title>
+
+  <style>
+    body { font-family: Arial, sans-serif; background:#f3f3f3; padding:20px; }
+    .box { max-width:600px; margin:auto; background:#fff; padding:20px; border-radius:8px; }
+    .label { font-weight:bold; }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h2>New Contact Message</h2>
+
+    <p><span class="label">Name:</span> <%= name %></p>
+    <p><span class="label">Email:</span> <%= email %></p>
+    <p><span class="label">Message:</span></p>
+    <p><%= message %></p>
+  </div>
+</body>
+</html>

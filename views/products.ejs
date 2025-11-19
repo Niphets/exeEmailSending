@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/headerFiles") %>
+  <title>Products | Pick Freshy</title>
+</head>
+
+<body>
+  <%- include("partials/header") %>
+
+  <div class="container my-5">
+    <h2 class="text-center mb-4">Our Products</h2>
+
+    <div class="row">
+      <% products.forEach(p => { %>
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <img src="<%= p.image %>" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title"><%= p.title %></h5>
+              <p><%= p.description %></p>
+              <p class="fw-bold"><%= p.price %></p>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <%- include("partials/footer") %>
+</body>
+</html>
