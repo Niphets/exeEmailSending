@@ -6,6 +6,7 @@ const cors = require("cors");
 const productsData = require("./data/products");
 
 const app = express();
+app.set("trust proxy", process.env.TRUST_PROXY ? Number(process.env.TRUST_PROXY) : 1);
 
 // Import routes
 const indexRoutes = require("./routes/index");

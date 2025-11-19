@@ -10,17 +10,38 @@ if (!EMAIL || !EMAIL_PASSWORD) {
 }
 
 // Email transporter
+// const transporter = nodemailer.createTransport({
+//     host: "smtp.gmail.com",
+//     port: 465,
+//     secure: true,
+//     auth: {
+//         user: EMAIL,
+//         pass: EMAIL_PASSWORD
+//     },
+//     tls: {
+//         rejectUnauthorized: true
+//     }
+// });
+
+const smtpPort = Number(process.env.SMTP_PORT || 587);
+const smtpSecure = process.env.SMTP_SECURE
+    ? process.env.SMTP_SECURE === "true"
+    : smtpPort === 465;
+
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || "smtp.gmail.com",
-    port: Number(process.env.SMTP_PORT || 465),
-    secure: process.env.SMTP_SECURE ? process.env.SMTP_SECURE === "true" : true,
+    port: smtpPort,
+    secure: smtpSecure,
     auth: {
         user: EMAIL,
         pass: EMAIL_PASSWORD
     },
     tls: {
-        rejectUnauthorized: process.env.SMTP_REJECT_UNAUTHORIZED ? process.env.SMTP_REJECT_UNAUTHORIZED === "true" : true
-    }
+        rejectUnauthorized: process.env.SMTP_REJECT_UNAUTHORIZED
+            ? process.env.SMTP_REJECT_UNAUTHORIZED === "true"
+            : true
+    },
+    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 10_000)
 });
 
 
