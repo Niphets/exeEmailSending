@@ -1,16 +1,20 @@
 require("dotenv").config();
 const express = require("express");
+const app = express();          // 1️⃣ create app FIRST
+
+app.set("trust proxy", 1);      // 2️⃣ MUST be here FOR RENDER (IMPORTANT)
+
 const path = require("path");
 const helmet = require("helmet");
 const cors = require("cors");
 const productsData = require("./data/products");
 
-const app = express();
+// Import routes
+const indexRoutes = require("./routes/index");
+const productsRoutes = require("./routes/products");
+const contactRoutes = require("./routes/contact");
 
-// MUST be first
-app.set("trust proxy", 1);
-
-// Middleware
+// Middleware (all below trust proxy)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(helmet());
@@ -27,11 +31,11 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-app.use("/", require("./routes/index"));
-app.use("/products", require("./routes/products"));
-app.use("/contact", require("./routes/contact"));
+app.use("/", indexRoutes);
+app.use("/products", productsRoutes);
+app.use("/contact", contactRoutes);
 
-// 404 catch
+// 404
 app.use((req, res) => {
     res.status(404).render("home", { 
         error: "Page not found",
@@ -42,5 +46,5 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-    console.log(`🚀 Pick Freshy server running: http://localhost:${PORT}`);
+    console.log(`🚀 Pick Freshy running: http://localhost:${PORT}`);
 });
