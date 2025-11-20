@@ -5,8 +5,9 @@ const ejs = require("ejs");
 const EMAIL = process.env.EMAIL;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 
+// Warn if env vars missing
 if (!EMAIL || !EMAIL_PASSWORD) {
-    console.warn("⚠️  EMAIL or EMAIL_PASSWORD env vars are missing. Contact emails will fail until they are provided.");
+    console.warn("⚠️ EMAIL or EMAIL_PASSWORD env vars are missing. Emails will fail.");
 }
 
 // Email transporter
@@ -23,29 +24,27 @@ if (!EMAIL || !EMAIL_PASSWORD) {
 //     }
 // });
 
-const smtpPort = Number(process.env.SMTP_PORT || 587);
-const smtpSecure = process.env.SMTP_SECURE
-    ? process.env.SMTP_SECURE === "true"
-    : smtpPort === 465;
 
+// 🔥 Render-safe Gmail SMTP settings
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || "smtp.gmail.com",
-    port: smtpPort,
-    secure: smtpSecure,
+    port: Number(process.env.SMTP_PORT || 587),   // MUST be 587 on Render
+    secure: false,                                // ALWAYS false for port 587 (STARTTLS)
     auth: {
         user: EMAIL,
         pass: EMAIL_PASSWORD
     },
     tls: {
-        rejectUnauthorized: process.env.SMTP_REJECT_UNAUTHORIZED
-            ? process.env.SMTP_REJECT_UNAUTHORIZED === "true"
-            : true
+        rejectUnauthorized: process.env.SMTP_REJECT_UNAUTHORIZED === "true"
     },
-    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 10_000)
+    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 15000),
+
+    // Debugging (shows details in Render logs)
+    logger: true,
+    debug: true
 });
 
-
-// Featured products rendered into the email template
+// Featured products
 const featuredProducts = [
     {
         title: "Organic Apples",
@@ -72,10 +71,7 @@ const templateDefaults = {
 };
 
 function getEmailTemplateData(overrides = {}) {
-    return {
-        ...templateDefaults,
-        ...overrides
-    };
+    return { ...templateDefaults, ...overrides };
 }
 
 async function renderContactEmail(templateValues) {
@@ -99,21 +95,21 @@ async function sendContactEmail(name, email, message) {
         subject: `New Contact Message from ${name}`,
         html: htmlContent,
         attachments: [
-            { 
-                filename: "apple.jpg", 
-                path: path.join(__dirname, "../public/images/apple.jpg"), 
-                cid: "apple" 
+            {
+                filename: "apple.jpg",
+                path: path.join(__dirname, "../public/images/apple.jpg"),
+                cid: "apple"
             },
-            { 
-                filename: "carrots.jpg", 
-                path: path.join(__dirname, "../public/images/carrots.jpg"), 
-                cid: "carrot" 
+            {
+                filename: "carrots.jpg",
+                path: path.join(__dirname, "../public/images/carrots.jpg"),
+                cid: "carrot"
             }
         ]
     });
 }
 
-module.exports = { 
+module.exports = {
     sendContactEmail,
     renderContactEmail,
     getEmailTemplateData
